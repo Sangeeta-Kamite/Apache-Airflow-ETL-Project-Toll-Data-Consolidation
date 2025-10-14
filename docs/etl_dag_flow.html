@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ETL_toll_data — Data Flow Diagram</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#151b31;
+      --accent:#6ea8ff;
+      --text:#e6e9f2;
+      --muted:#9aa3b2;
+      --success:#21c27a;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.45;
+      padding:24px;
+    }
+    header{
+      margin-bottom:18px;
+    }
+    h1{
+      font-size:22px;
+      margin:0 0 6px 0;
+      font-weight:700;
+      letter-spacing:0.2px;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .flow{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      overflow:auto;
+      padding:18px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .node{
+      min-width:200px;
+      max-width:240px;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:14px 14px 12px;
+      position:relative;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+    .node h3{
+      margin:0 0 8px 0;
+      font-size:14px;
+      font-weight:700;
+      color:var(--text);
+      letter-spacing:.2px;
+    }
+    .node .meta{
+      display:inline-block;
+      font-size:11px;
+      color:var(--muted);
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.06);
+      padding:3px 8px;
+      border-radius:999px;
+    }
+    .arrow{
+      flex:0 0 46px;
+      height:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:.9;
+      filter:drop-shadow(0 4px 12px rgba(0,0,0,.35));
+    }
+    .legend{
+      margin-top:14px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .badge{
+      color:#072d16;
+      background:var(--success);
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+      margin-left:6px;
+    }
+    code{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font-size:12px;
+      color:#d6e1ff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ETL_toll_data — Data Flow Diagram <span class="badge">BashOperator</span></h1>
+    <div class="sub">Linear pipeline of tasks in the Apache Airflow DAG: unzip → extract (CSV → TSV → fixed-width) → consolidate → transform</div>
+  </header>
+
+  <section class="flow" aria-label="ETL Flow">
+    <article class="node">
+      <h3>unzip_data</h3>
+      <div class="meta">Unpack <code>tolldata.tgz</code> to staging</div>
+    </article>
+
+    <div class="arrow" aria-hidden="true">
+      <svg width="46" height="46" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#6ea8ff"/>
+            <stop offset="100%" stop-color="#9fd1ff"/>
+          </linearGradient>
+        </defs>
+        <path d="M6 23h26" stroke="url(#g)" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M28 15l12 8-12 8z" fill="url(#g)"/>
+      </svg>
+    </div>
+
+    <article class="node">
+      <h3>extract_data_from_csv</h3>
+      <div class="meta">Select Rowid, Timestamp, Vehicle#,&nbsp;Type</div>
+    </article>
+
+    <div class="arrow" aria-hidden="true">
+      <svg width="46" height="46" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 23h26" stroke="url(#g)" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M28 15l12 8-12 8z" fill="url(#g)"/>
+      </svg>
+    </div>
+
+    <article class="node">
+      <h3>extract_data_from_tsv</h3>
+      <div class="meta">Select Axles, Tollplaza&nbsp;id/code</div>
+    </article>
+
+    <div class="arrow" aria-hidden="true">
+      <svg width="46" height="46" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 23h26" stroke="url(#g)" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M28 15l12 8-12 8z" fill="url(#g)"/>
+      </svg>
+    </div>
+
+    <article class="node">
+      <h3>extract_data_from_fixed_width</h3>
+      <div class="meta">Select Payment code, Vehicle code</div>
+    </article>
+
+    <div class="arrow" aria-hidden="true">
+      <svg width="46" height="46" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 23h26" stroke="url(#g)" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M28 15l12 8-12 8z" fill="url(#g)"/>
+      </svg>
+    </div>
+
+    <article class="node">
+      <h3>consolidate_data</h3>
+      <div class="meta">Merge CSV + TSV + Fixed-width</div>
+    </article>
+
+    <div class="arrow" aria-hidden="true">
+      <svg width="46" height="46" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 23h26" stroke="url(#g)" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M28 15l12 8-12 8z" fill="url(#g)"/>
+      </svg>
+    </div>
+
+    <article class="node">
+      <h3>transform_data</h3>
+      <div class="meta">Uppercase <code>vehicle_type</code>; write <code>transformed_data.csv</code></div>
+    </article>
+  </section>
+
+  <p class="legend">
+    Tip: You can embed this file in your GitHub Pages or link it from your README.
+  </p>
+</body>
+</html>
