@@ -49,8 +49,6 @@ This DAG automates the process of unzipping, extracting, transforming, and conso
 
 ##  Data Flow Diagram
 
-## 🧩 Workflow Diagram
-
 The following diagram illustrates the data flow in the Apache Airflow DAG pipeline.
 
-![ETL Data Flow Diagram](docs/etl_data_flow_diagram.png)
+![ETL Data Flow Diagram](docs/ETL_dag_Flow.jpg)
